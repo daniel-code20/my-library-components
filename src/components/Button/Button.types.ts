@@ -1,4 +1,4 @@
-export type Colors = "default" | "primary" | "warning" | "danger" | "violet" | "green";
+export type Colors = "default" | "primary" | "secondary" | "success" | "warning" | "danger" ;
 export type Size = "sm" | "md" | "lg";
 export type Radius = "none" | "sm" | "md" | "lg" | "full";
 export type Variant = "solid" | "outline" | "ghost" | "smooth" |"light";

@@ -16,6 +16,7 @@ export const Button: React.FC<ButtonProps> = ({
   children,
   className = "",
   disabled,
+
   ...props
 }) => {
   const base =
@@ -31,20 +32,19 @@ export const Button: React.FC<ButtonProps> = ({
         radiusClasses[radius],
         variantStyle,
         className,
-        { "opacity-60 cursor-not-allowed": disabled || loading }
+        {
+          "opacity-60 font-normal cursor-not-allowed pointer-events-none":
+            disabled || loading,
+          "hover:bg-transparent hover:shadow-none": loading || disabled,
+        }
       )}
       disabled={disabled || loading}
       {...props}
     >
-      {loading ? (
-        <FiLoader className="animate-spin" />
-      ) : (
-        <>
-          {leftIcon && <span>{leftIcon}</span>}
-          <span>{children}</span>
-          {rightIcon && <span>{rightIcon}</span>}
-        </>
-      )}
+      {loading && <FiLoader className="animate-spin" />}
+      {!loading && leftIcon && <span>{leftIcon}</span>}
+      <span>{children}</span>
+      {!loading && rightIcon && <span>{rightIcon}</span>}
     </button>
   );
 };
