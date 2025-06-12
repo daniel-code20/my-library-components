@@ -5,9 +5,13 @@ import {
   FiArrowRight,
   FiPlus,
   FiArrowLeft,
+  FiHeart,
+  FiBell,
 } from "react-icons/fi";
 import { IoIosLink } from "react-icons/io";
 import { AiOutlineDelete } from "react-icons/ai";
+import { IconButton } from "./Button/IconButton";
+import { ToggleSwitch } from "./Button/ToggleSwitch";
 
 const colors = [
   "default",
@@ -90,7 +94,7 @@ export const Prueba: React.FC = () => {
 
         {/* Grupo de botones por variante */}
         <div className="p-6 rounded-lg bg-slate-950 border border-white/10 shadow-md">
-          <h1 className="text-xl mb-4 font-bold text-white">Light</h1>
+          <h1 className="text-xl mb-4 font-bold text-white">Faint</h1>
           <div className="flex flex-wrap gap-4">
             {colors.map((color) => (
               <Button
@@ -98,7 +102,7 @@ export const Prueba: React.FC = () => {
                 color={color}
                 size="md"
                 radius="md"
-                variant="light"
+                variant="faint"
               >
                 {color.charAt(0).toUpperCase() + color.slice(1)}
               </Button>
@@ -194,54 +198,46 @@ export const Prueba: React.FC = () => {
           </div>
         </div>
 
+        {/* Grupo de botones por variante */}
         <div className="p-6 rounded-lg bg-slate-950 border border-white/10 shadow-md">
-          <h1 className="text-xl mb-4 font-bold text-white">Actions Icons</h1>
-          <div className="flex flex-wrap gap-4 ">
-            <Button
-              leftIcon={<FiPlus />}
+          <h1 className="text-xl mb-4 font-bold text-white">Icon Button</h1>
+          <div className="flex flex-wrap gap-4 items-start">
+            <IconButton
+              icon={<FiPlus />}
               color="primary"
-              size="md"
-              radius="md"
               variant="solid"
-            >
-              Action
-            </Button>
-            <Button
-              leftIcon={<FiPlus />}
-              color="primary"
               size="md"
-              radius="md"
-              variant="outline"
-            >
-              Action
-            </Button>
-            <Button
-              leftIcon={<FiPlus />}
-              color="primary"
+              radius="lg"
+              aria-label="Buscar"
+            />
+            <IconButton
+              icon={<FiHeart />}
+              color="danger"
+              variant="solid"
               size="md"
-              radius="md"
-              variant="smooth"
-            >
-              Action
-            </Button>
-            <Button
-              leftIcon={<FiPlus />}
-              color="primary"
+              radius="lg"
+              aria-label="Buscar"
+            />
+            <IconButton
+              icon={<FiBell />}
+              color="warning"
+              variant="solid"
               size="md"
-              radius="md"
-              variant="ghost"
-            >
-              Action
-            </Button>
-            <Button
-              leftIcon={<FiPlus />}
-              color="primary"
-              size="md"
-              radius="md"
-              variant="light"
-            >
-              Action
-            </Button>
+              radius="lg"
+              aria-label="Buscar"
+            />
+          </div>
+        </div>
+
+        <div className="p-6 rounded-lg bg-slate-950 border border-white/10 shadow-md">
+          <h1 className="text-xl mb-4 font-bold text-white">Toggle Button</h1>
+          <div className="flex flex-wrap gap-4">
+            <ToggleSwitch
+              label="Activate notifications"
+              size="lg"
+              color="success"
+              onChange={(e) => console.log(e.target.checked)}
+            />
           </div>
         </div>
 
@@ -264,28 +260,13 @@ export const Prueba: React.FC = () => {
         <div className="p-6 rounded-lg bg-slate-950 border border-white/10 shadow-md">
           <h1 className="text-xl mb-4 font-bold text-white">Sizes</h1>
           <div className="flex flex-wrap gap-4 items-start">
-            <Button
-              color="default"
-              size="sm"
-              radius="md"
-              variant="solid"
-            >
+            <Button color="default" size="sm" radius="md" variant="solid">
               Small
             </Button>
-            <Button
-              color="default"
-              size="md"
-              radius="md"
-              variant="solid"
-            >
+            <Button color="default" size="md" radius="md" variant="solid">
               Medium
             </Button>
-            <Button
-              color="default"
-              size="lg"
-              radius="md"
-              variant="solid"
-            >
+            <Button color="default" size="lg" radius="md" variant="solid">
               Large
             </Button>
           </div>
@@ -295,44 +276,19 @@ export const Prueba: React.FC = () => {
         <div className="p-6 rounded-lg bg-slate-950 border border-white/10 shadow-md">
           <h1 className="text-xl mb-4 font-bold text-white">Radius</h1>
           <div className="flex flex-wrap gap-4 items-start">
-            <Button
-              color="default"
-              size="md"
-              radius="none"
-              variant="solid"
-            >
+            <Button color="default" size="md" radius="none" variant="solid">
               None
             </Button>
-            <Button
-              color="default"
-              size="md"
-              radius="sm"
-              variant="solid"
-            >
+            <Button color="default" size="md" radius="sm" variant="solid">
               Small
             </Button>
-            <Button
-              color="default"
-              size="md"
-              radius="md"
-              variant="solid"
-            >
+            <Button color="default" size="md" radius="md" variant="solid">
               Medium
             </Button>
-            <Button
-              color="default"
-              size="md"
-              radius="lg"
-              variant="solid"
-            >
+            <Button color="default" size="md" radius="lg" variant="solid">
               Large
             </Button>
-            <Button
-              color="default"
-              size="md"
-              radius="full"
-              variant="solid"
-            >
+            <Button color="default" size="md" radius="full" variant="solid">
               Full
             </Button>
           </div>
