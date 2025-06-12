@@ -15,7 +15,7 @@ const toggleSizeClasses = {
   md: {
     track: "w-11 h-6",
     thumb: "w-4 h-4",
-    thumbTranslateValue: `${44 - 16 - (THUMB_MARGIN * 2)}px`,
+    thumbTranslateValue: `${44 -16 - (THUMB_MARGIN * 2)}px`,
   },
   lg: {
     track: "w-14 h-7",
@@ -69,7 +69,7 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   const thumbClasses = clsx(
     "absolute top-1/2 -translate-y-1/2 bg-white rounded-full transition-transform duration-200 ease-in-out",
     currentToggleSize.thumb,
-    `left-[${THUMB_MARGIN}px]`,
+    "left-[4px]",
     {
       "shadow-md": isChecked,
     }

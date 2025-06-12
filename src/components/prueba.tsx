@@ -234,7 +234,7 @@ export const Prueba: React.FC = () => {
           <div className="flex flex-wrap gap-4">
             <ToggleSwitch
               label="Activate notifications"
-              size="lg"
+              size="md"
               color="success"
               onChange={(e) => console.log(e.target.checked)}
             />
