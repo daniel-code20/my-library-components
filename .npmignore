@@ -1,0 +1,12 @@
+src/components/Button/prueba.tsx
+*.test.tsx
+*.test.ts
+*.spec.tsx
+*.spec.ts
+*.md
+.vitepress
+.vscode
+example/
+examples/
+tests/
+__tests__/

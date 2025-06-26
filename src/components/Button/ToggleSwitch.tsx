@@ -6,22 +6,10 @@ import { ToggleSwitchProps } from "./Button.types";
 
 const THUMB_MARGIN = 4;
 
-const toggleSizeClasses = {
-  sm: {
-    track: "w-9 h-5",
-    thumb: "w-3 h-3",
-    thumbTranslateValue: `${36 - 12 - (THUMB_MARGIN * 2)}px`,
-  },
-  md: {
-    track: "w-11 h-6",
-    thumb: "w-4 h-4",
-    thumbTranslateValue: `${44 -16 - (THUMB_MARGIN * 2)}px`,
-  },
-  lg: {
-    track: "w-14 h-7",
-    thumb: "w-5 h-5",
-    thumbTranslateValue: `${56 - 20 - (THUMB_MARGIN * 2)}px`,
-  },
+const thumbTranslateValueMap = {
+  sm: `${36 - 12 - (THUMB_MARGIN * 2)}px`,
+  md: `${44 - 16 - (THUMB_MARGIN * 2)}px`,
+  lg: `${56 - 20 - (THUMB_MARGIN * 2)}px`,
 };
 
 export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
@@ -54,25 +42,33 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
     onChange?.(event);
   };
 
-  const currentToggleSize = toggleSizeClasses[size] || toggleSizeClasses["md"];
-  const currentRadius = radiusClasses[radius];
-
   const trackActiveStyle = variantClasses[color][variant];
   const trackInactiveStyle = "bg-gray-300";
+  const currentRadius = radiusClasses[radius];
 
-  const thumbTransformStyle = {
-    transform: isChecked
-      ? `translateX(${currentToggleSize.thumbTranslateValue})`
-      : "translateX(0px)",
+  const thumbTranslateStyle = {
+    transform: isChecked ? `translateX(${thumbTranslateValueMap[size]})` : "translateX(0px)",
   };
 
   const thumbClasses = clsx(
-    "absolute top-1/2 -translate-y-1/2 bg-white rounded-full transition-transform duration-200 ease-in-out",
-    currentToggleSize.thumb,
-    "left-[4px]",
+    "absolute top-1/2 -translate-y-1/2 bg-white rounded-full transition-transform duration-200 ease-in-out left-[4px]",
     {
+      "w-3 h-3": size === "sm",
+      "w-4 h-4": size === "md",
+      "w-5 h-5": size === "lg",
       "shadow-md": isChecked,
     }
+  );
+
+  const trackClasses = clsx(
+    "relative inline-flex items-center flex-shrink-0 cursor-pointer transition-colors duration-200 ease-in-out",
+    {
+      "w-9 h-5": size === "sm",
+      "w-11 h-6": size === "md",
+      "w-14 h-7": size === "lg",
+    },
+    currentRadius,
+    isChecked ? trackActiveStyle : trackInactiveStyle
   );
 
   return (
@@ -91,15 +87,8 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
         disabled={disabled}
         {...props}
       />
-      <div
-        className={clsx(
-          "relative inline-flex items-center flex-shrink-0 cursor-pointer transition-colors duration-200 ease-in-out",
-          currentToggleSize.track,
-          currentRadius,
-          isChecked ? trackActiveStyle : trackInactiveStyle
-        )}
-      >
-        <span className={thumbClasses} style={thumbTransformStyle}></span>
+      <div className={trackClasses}>
+        <span className={thumbClasses} style={thumbTranslateStyle}></span>
       </div>
       {label && (
         <span className="text-gray-700 dark:text-gray-200">{label}</span>

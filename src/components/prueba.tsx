@@ -1,301 +1,101 @@
 import React from "react";
+import { Card, CardImage, CardHeader, CardBody, CardFooter } from "./Card/Card";
+import { FiUser, FiImage, FiPlus } from "react-icons/fi";
+import { BsCheckCircleFill } from "react-icons/bs";
 import { Button } from "./Button";
-import {
-  FiNavigation,
-  FiArrowRight,
-  FiPlus,
-  FiArrowLeft,
-  FiHeart,
-  FiBell,
-} from "react-icons/fi";
-import { IoIosLink } from "react-icons/io";
-import { AiOutlineDelete } from "react-icons/ai";
-import { IconButton } from "./Button/IconButton";
-import { ToggleSwitch } from "./Button/ToggleSwitch";
-
-const colors = [
-  "default",
-  "primary",
-  "secondary",
-  "success",
-  "warning",
-  "danger",
-] as const;
 
 export const Prueba: React.FC = () => {
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-8">
-      <div className="w-full max-w-5xl flex flex-col gap-10">
-        {/* Grupo de botones por color */}
-        <div className="p-6 rounded-lg bg-slate-950 border border-white/10 shadow-md">
-          <h1 className="text-xl mb-4 font-bold text-white">Colors</h1>
-          <div className="flex flex-wrap gap-4 ">
-            {colors.map((color) => (
-              <Button key={color} color={color} size="md" radius="md">
-                {color.charAt(0).toUpperCase() + color.slice(1)}
-              </Button>
-            ))}
-          </div>
+    <div className="min-h-screen bg-gray-200 flex items-center justify-center p-8">
+      <Card className="relative w-full max-w-xs mx-auto rounded-2xl overflow-hidden shadow-lg mr-4">
+        <div className="p-2 pt-2">
+          <CardImage
+            src="https://images.unsplash.com/photo-1536896407451-6e3dd976edd1?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            className="w-full h-72 object-cover rounded-2xl"
+          />
         </div>
 
-        {/* Grupo de botones por variante */}
-        <div className="p-6 rounded-lg bg-slate-950 border border-white/10 shadow-md">
-          <h1 className="text-xl mb-4 font-bold text-white">Outline</h1>
-          <div className="flex flex-wrap gap-4">
-            {colors.map((color) => (
+        <CardHeader className="px-4">
+          <div className="flex items-center gap-2 mb-1">
+            <h2 className="text-2xl font-bold text-gray-900 leading-tight">
+              Daisy Wilcox
+            </h2>
+            <BsCheckCircleFill className="text-blue-500 text-base" />
+          </div>
+        </CardHeader>
+
+        <CardBody className="px-4 text-gray-400 text-md leading-snug break-words">
+          I'm a designer focused on creating engaging visual experiences.
+        </CardBody>
+
+        <CardFooter className="px-4 pb-4">
+          <div className="flex flex-wrap items-center justify-between gap-6 text-sm text-gray-600 w-full">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-1">
+                <FiUser className="text-gray-500" />
+                <span>245</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <FiImage className="text-gray-500" />
+                <span>32</span>
+              </div>
+            </div>
+
+            <Button
+              rightIcon={<FiPlus />}
+              radius="full"
+              className="bg-gradient-to-r from-purple-400 to-blue-400 text-white font-semibold shadow px-4"
+            >
+              Follow
+            </Button>
+          </div>
+        </CardFooter>
+      </Card>
+
+      <Card className="relative w-full max-w-xs mx-auto rounded-2xl overflow-hidden shadow-lg">
+        <CardImage
+          src="https://images.unsplash.com/photo-1536896407451-6e3dd976edd1?q=80&w=687&auto=format&fit=crop"
+          className="w-full h-max object-cover"
+        />
+
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent py-4 flex flex-col justify-end text-white">
+          <CardHeader className="px-4">
+            <div className="flex items-center gap-2 mb-1">
+              <h2 className="text-2xl font-bold text-white leading-tight">
+                Daisy Wilcox
+              </h2>
+              <BsCheckCircleFill className="text-blue-500 text-base" />
+            </div>
+          </CardHeader>
+
+          <CardBody className="p-0 text-sm text-white/80 leading-tight break-words">
+            I'm a designer focused on creating engaging visual experiences.
+          </CardBody>
+
+          <CardFooter className="p-0 mt-4">
+            <div className="flex items-center justify-between w-full text-sm">
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-1">
+                  <FiUser className="text-white/70" />
+                  <span>245</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <FiImage className="text-white/70" />
+                  <span>32</span>
+                </div>
+              </div>
+
               <Button
-                key={color}
-                color={color}
-                size="md"
-                radius="md"
-                variant="outline"
+                rightIcon={<FiPlus />}
+                radius="full"
+                className="bg-gradient-to-r from-purple-400 to-blue-400 text-white text-sm font-semibold px-4 py-1.5 shadow"
               >
-                {color.charAt(0).toUpperCase() + color.slice(1)}
+                Follow
               </Button>
-            ))}
-          </div>
+            </div>
+          </CardFooter>
         </div>
-
-        {/* Grupo de botones por variante */}
-        <div className="p-6 rounded-lg bg-slate-950 border border-white/10 shadow-md">
-          <h1 className="text-xl mb-4 font-bold text-white">Smooth</h1>
-          <div className="flex flex-wrap gap-4">
-            {colors.map((color) => (
-              <Button
-                key={color}
-                color={color}
-                size="md"
-                radius="md"
-                variant="smooth"
-              >
-                {color.charAt(0).toUpperCase() + color.slice(1)}
-              </Button>
-            ))}
-          </div>
-        </div>
-
-        {/* Grupo de botones por variante */}
-        <div className="p-6 rounded-lg bg-slate-950 border border-white/10 shadow-md">
-          <h1 className="text-xl mb-4 font-bold text-white">Ghost</h1>
-          <div className="flex flex-wrap gap-4">
-            {colors.map((color) => (
-              <Button
-                key={color}
-                color={color}
-                size="md"
-                radius="md"
-                variant="ghost"
-              >
-                {color.charAt(0).toUpperCase() + color.slice(1)}
-              </Button>
-            ))}
-          </div>
-        </div>
-
-        {/* Grupo de botones por variante */}
-        <div className="p-6 rounded-lg bg-slate-950 border border-white/10 shadow-md">
-          <h1 className="text-xl mb-4 font-bold text-white">Faint</h1>
-          <div className="flex flex-wrap gap-4">
-            {colors.map((color) => (
-              <Button
-                key={color}
-                color={color}
-                size="md"
-                radius="md"
-                variant="faint"
-              >
-                {color.charAt(0).toUpperCase() + color.slice(1)}
-              </Button>
-            ))}
-          </div>
-        </div>
-
-        {/* Grupo de botones por variante */}
-        <div className="p-6 rounded-lg bg-slate-950 border border-white/10 shadow-md">
-          <h1 className="text-xl mb-4 font-bold text-white">With Left Icons</h1>
-          <div className="flex flex-wrap gap-4">
-            <Button
-              leftIcon={<FiNavigation />}
-              color="primary"
-              size="md"
-              radius="md"
-              variant="solid"
-            >
-              Get Started
-            </Button>
-            <Button
-              leftIcon={<IoIosLink />}
-              color="secondary"
-              size="md"
-              radius="md"
-              variant="solid"
-            >
-              Copy Link
-            </Button>
-            <Button
-              leftIcon={<AiOutlineDelete />}
-              color="danger"
-              size="md"
-              radius="md"
-              variant="solid"
-            >
-              Delete
-            </Button>
-            <Button
-              leftIcon={<FiArrowLeft />}
-              color="primary"
-              size="md"
-              radius="md"
-              variant="solid"
-            >
-              Back
-            </Button>
-          </div>
-        </div>
-
-        {/* Grupo de botones por variante */}
-        <div className="p-6 rounded-lg bg-slate-950 border border-white/10 shadow-md">
-          <h1 className="text-xl mb-4 font-bold text-white">
-            With Right Icons
-          </h1>
-          <div className="flex flex-wrap gap-4">
-            <Button
-              rightIcon={<FiNavigation />}
-              color="primary"
-              size="md"
-              radius="md"
-              variant="solid"
-            >
-              Get Started
-            </Button>
-            <Button
-              rightIcon={<IoIosLink />}
-              color="secondary"
-              size="md"
-              radius="md"
-              variant="solid"
-            >
-              Copy Link
-            </Button>
-            <Button
-              rightIcon={<AiOutlineDelete />}
-              color="danger"
-              size="md"
-              radius="md"
-              variant="solid"
-            >
-              Delete
-            </Button>
-            <Button
-              rightIcon={<FiArrowRight />}
-              color="primary"
-              size="md"
-              radius="md"
-              variant="solid"
-            >
-              Next
-            </Button>
-          </div>
-        </div>
-
-        {/* Grupo de botones por variante */}
-        <div className="p-6 rounded-lg bg-slate-950 border border-white/10 shadow-md">
-          <h1 className="text-xl mb-4 font-bold text-white">Icon Button</h1>
-          <div className="flex flex-wrap gap-4 items-start">
-            <IconButton
-              icon={<FiPlus />}
-              color="primary"
-              variant="solid"
-              size="md"
-              radius="lg"
-              aria-label="Buscar"
-            />
-            <IconButton
-              icon={<FiHeart />}
-              color="danger"
-              variant="solid"
-              size="md"
-              radius="lg"
-              aria-label="Buscar"
-            />
-            <IconButton
-              icon={<FiBell />}
-              color="warning"
-              variant="solid"
-              size="md"
-              radius="lg"
-              aria-label="Buscar"
-            />
-          </div>
-        </div>
-
-        <div className="p-6 rounded-lg bg-slate-950 border border-white/10 shadow-md">
-          <h1 className="text-xl mb-4 font-bold text-white">Toggle Button</h1>
-          <div className="flex flex-wrap gap-4">
-            <ToggleSwitch
-              label="Activate notifications"
-              size="md"
-              color="success"
-              onChange={(e) => console.log(e.target.checked)}
-            />
-          </div>
-        </div>
-
-        <div className="p-6 rounded-lg bg-slate-950 border border-white/10 shadow-md">
-          <h1 className="text-xl mb-4 font-bold text-white">Loading</h1>
-          <div className="flex flex-wrap gap-4">
-            <Button
-              color="primary"
-              size="md"
-              radius="md"
-              variant="solid"
-              loading
-            >
-              Loading
-            </Button>
-          </div>
-        </div>
-
-        {/* Grupo de botones por sizes */}
-        <div className="p-6 rounded-lg bg-slate-950 border border-white/10 shadow-md">
-          <h1 className="text-xl mb-4 font-bold text-white">Sizes</h1>
-          <div className="flex flex-wrap gap-4 items-start">
-            <Button color="default" size="sm" radius="md" variant="solid">
-              Small
-            </Button>
-            <Button color="default" size="md" radius="md" variant="solid">
-              Medium
-            </Button>
-            <Button color="default" size="lg" radius="md" variant="solid">
-              Large
-            </Button>
-          </div>
-        </div>
-
-        {/* Grupo de botones por radius */}
-        <div className="p-6 rounded-lg bg-slate-950 border border-white/10 shadow-md">
-          <h1 className="text-xl mb-4 font-bold text-white">Radius</h1>
-          <div className="flex flex-wrap gap-4 items-start">
-            <Button color="default" size="md" radius="none" variant="solid">
-              None
-            </Button>
-            <Button color="default" size="md" radius="sm" variant="solid">
-              Small
-            </Button>
-            <Button color="default" size="md" radius="md" variant="solid">
-              Medium
-            </Button>
-            <Button color="default" size="md" radius="lg" variant="solid">
-              Large
-            </Button>
-            <Button color="default" size="md" radius="full" variant="solid">
-              Full
-            </Button>
-          </div>
-        </div>
-      </div>
+      </Card>
     </div>
   );
 };
-
-export default Prueba;

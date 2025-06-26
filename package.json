@@ -1,19 +1,21 @@
 {
   "name": "dt-component-library",
-  "version": "1.0.6",
+  "version": "2.0.8",
   "type": "module",
   "description": "Librería de componentes con React, Tailwind y Vite",
   "main": "dist/my-component-library.umd.js",
   "module": "dist/my-component-library.es.js",
   "types": "dist/types/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "README.md"
   ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "react": "^19.1.0",
@@ -46,11 +48,11 @@
     "react-icons": "^5.5.0",
     "clsx": "^2.1.1"
 },
-  "exports": {
-    ".": {
-      "import": "./dist/my-component-library.es.js",
-      "require": "./dist/my-component-library.umd.js",
-      "types": "./dist/types/index.d.ts"
-    }
+"exports": {
+  ".": {
+    "types": "./dist/types/index.d.ts",
+    "import": "./dist/my-component-library.es.js",
+    "require": "./dist/my-component-library.umd.js"
   }
+}
 }
