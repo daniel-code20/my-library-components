@@ -8,8 +8,7 @@ import type {
 
 export const baseClasses =
   "peer w-full transition-all duration-200 outline-none " +
-  "disabled:cursor-not-allowed disabled:opacity-60 placeholder-opacity-70 " +
-  "text-gray-900";
+  "disabled:cursor-not-allowed disabled:opacity-60 placeholder-opacity-70 ";
 
 export const sizeClasses: Record<InputSize, string> = {
   xs: "h-7 text-xs",
@@ -63,7 +62,7 @@ export const variantStyles = {
     },
   },
   underlined: {
-    base: "border-b bg-transparent pb-1 focus:outline-none rounded-none ",
+    base: "border-b bg-transparent focus:outline-none rounded-none",
     color: {
       default:
         "border-gray-300 focus:border-gray-500 focus:border-b-2 text-neutral-800 ",
@@ -104,7 +103,8 @@ export function getInputClasses({
   variant,
   color,
   hasLeftIcon,
-  hasRightIcon, 
+  hasRightIcon,
+  floatingLabel = false,
   className,
 }: {
   size: InputSize;
@@ -113,39 +113,41 @@ export function getInputClasses({
   color: Colors;
   hasLeftIcon?: boolean;
   hasRightIcon?: boolean;
+  floatingLabel?: boolean;
   className?: string;
 }) {
   const variantClassSet = variantStyles[variant];
 
-
   const paddingX = {
     xs: "px-2",
-    sm: "px-3", 
+    sm: "px-3",
     md: "px-4",
     lg: "px-5",
     xl: "px-6",
   };
+
   const paddingY = {
-    xs: "py-1",
-    sm: "py-1.5",
-    md: "py-2",
-    lg: "py-2.5",
-    xl: "py-3",
+    xs: floatingLabel || variant === "underlined" ? "pt-6 pb-2" : "py-1",
+    sm: floatingLabel || variant === "underlined" ? "pt-8 pb-3.5" : "py-2",
+    md: floatingLabel || variant === "underlined" ? "pt-8.5 pb-5" : "py-2",
+    lg: floatingLabel || variant === "underlined" ? "pt-9 pb-5" : "py-2",
+    xl: floatingLabel || variant === "underlined" ? "pt-10 pb-4" : "py-3",
   };
 
   return clsx(
     baseClasses,
     sizeClasses[size],
     radiusClasses[radius],
-    variantClassSet.base, 
+    variantClassSet.base,
     variantClassSet.color[color],
-    paddingX[size], 
-    paddingY[size], 
-    hasLeftIcon && "pl-10", 
-    hasRightIcon && "pr-10", 
+    paddingX[size],
+    paddingY[size],
+    hasLeftIcon && "pl-10",
+    hasRightIcon && "pr-10",
     className
   );
 }
+
 
 export const errorStateClasses = {
   label: "text-rose-800",

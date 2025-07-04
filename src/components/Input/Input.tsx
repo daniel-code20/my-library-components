@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import clsx from "clsx";
-import { getInputClasses } from "./inputStyles"; 
+import { getInputClasses } from "./inputStyles";
 import type {
   Colors,
   InputSize,
@@ -9,12 +9,12 @@ import type {
 } from "./Input.types";
 import { FiCheckCircle } from "react-icons/fi";
 
+// Spinner de carga
 const Spinner = () => (
   <svg
     className="animate-spin h-5 w-5 text-current"
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
     viewBox="0 0 24 24"
+    fill="none"
   >
     <circle
       className="opacity-25"
@@ -23,21 +23,17 @@ const Spinner = () => (
       r="10"
       stroke="currentColor"
       strokeWidth="4"
-    ></circle>
+    />
     <path
       className="opacity-75"
       fill="currentColor"
-      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-    ></path>
+      d="M4 12a8 8 0 018-8V0C5.3 0 0 5.3 0 12h4z"
+    />
   </svg>
 );
 
-export interface InputProps
-  extends Omit<
-    React.InputHTMLAttributes<HTMLInputElement> &
-      React.TextareaHTMLAttributes<HTMLTextAreaElement>,
-    "size" | "color"
-  > {
+// Props base
+export interface InputPropsBase {
   color?: Colors;
   size?: InputSize;
   radius?: InputRadius;
@@ -50,9 +46,25 @@ export interface InputProps
   rightIcon?: React.ReactNode;
   floatingLabel?: boolean;
   isLoading?: boolean;
-  isValid?: boolean; 
-  multiline?: boolean;
+  isValid?: boolean;
 }
+
+export type InputProps =
+  | ({
+      multiline?: false;
+    } & InputPropsBase &
+      Omit<React.InputHTMLAttributes<HTMLInputElement>, "size" | "color"> & {
+        onChange?: React.ChangeEventHandler<HTMLInputElement>;
+      })
+  | ({
+      multiline: true;
+    } & InputPropsBase &
+      Omit<
+        React.TextareaHTMLAttributes<HTMLTextAreaElement>,
+        "size" | "color"
+      > & {
+        onChange?: React.ChangeEventHandler<HTMLTextAreaElement>;
+      });
 
 export const Input: React.FC<InputProps> = ({
   label,
@@ -70,7 +82,7 @@ export const Input: React.FC<InputProps> = ({
   rightIcon,
   floatingLabel = false,
   isLoading,
-  isValid, 
+  isValid,
   multiline = false,
   ...props
 }) => {
@@ -78,36 +90,59 @@ export const Input: React.FC<InputProps> = ({
   const inputId = id ?? generatedId;
 
   const inputColor = error ? "danger" : color;
-
-  const baseInputClasses = clsx(
-    "peer w-full transition-all duration-200",
-    getInputClasses({
-      size,
-      radius,
-      variant,
-      color: inputColor,
-      className,
-    }),
-    leftIcon && "pl-10",
-    rightIcon && !isLoading && "pr-10",
-    isLoading && "pr-10"
+  const [hasValue, setHasValue] = React.useState(
+    Boolean(props.value ?? props.defaultValue ?? "")
   );
+
+  useEffect(() => {
+    setHasValue(Boolean(props.value ?? props.defaultValue ?? ""));
+  }, [props.value, props.defaultValue]);
+
+  const handleChange = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    setHasValue(Boolean(e.target.value));
+    props.onChange?.(e as never);
+  };
+
+  const inputClasses = getInputClasses({
+    size,
+    radius,
+    variant,
+    color: inputColor,
+    className,
+    floatingLabel,
+    hasLeftIcon: Boolean(leftIcon),
+    hasRightIcon: Boolean(rightIcon || isLoading || isValid),
+  });
 
   const sharedProps = {
     id: inputId,
-    placeholder: floatingLabel ? " " : placeholder, 
+    placeholder: floatingLabel || variant === "underlined" ? " " : placeholder,
     disabled,
     "aria-invalid": error,
     "aria-describedby": helperText ? `${inputId}-helper` : undefined,
-    className: baseInputClasses,
+    className: clsx(
+      "peer w-full transition-all duration-200",
+      inputClasses,
+      leftIcon && "pl-10",
+      (rightIcon || isLoading || isValid) && "pr-10"
+    ),
+    onChange: handleChange,
     ...props,
   };
 
-  const renderInputControl = () =>
+  if (variant === "underlined") {
+    delete sharedProps.defaultValue;
+  }
+
+  const renderInput = () =>
     multiline ? (
       <textarea
-        rows={4}
         {...(sharedProps as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
+        rows={4}
       />
     ) : (
       <input
@@ -115,42 +150,66 @@ export const Input: React.FC<InputProps> = ({
       />
     );
 
-  const renderLabel = () =>
-    label && (floatingLabel || variant === "underlined") ? (
+  const renderLabel = () => {
+    if (!label) return null;
+
+    const isFloating = floatingLabel;
+    const isUnderlined = variant === "underlined";
+
+    if (isFloating || isUnderlined) {
+      return (
+        <label
+          htmlFor={inputId}
+          className={clsx(
+            "absolute left-3 right-3 text-sm transition-all duration-200 origin-[0] pointer-events-none px-1",
+            // Floating label style
+            isFloating &&
+              clsx(
+                "peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100",
+                "peer-focus:top-2 peer-focus:scale-75 peer-focus:translate-y-0",
+                hasValue && "top-2 scale-75 translate-y-0",
+                !hasValue &&
+                  !props.value &&
+                  "top-1/2 -translate-y-1/2 scale-100"
+              ),
+            // Underlined label style
+            isUnderlined &&
+              clsx(
+                "peer-placeholder-shown:top-[70%] peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100",
+                "peer-focus:top-1 peer-focus:scale-75 peer-focus:translate-y-0",
+                hasValue && "top-1 scale-75 translate-y-0",
+                !hasValue &&
+                  !props.value &&
+                  "top-[70%] -translate-y-1/2 scale-100"
+              ),
+            error ? "text-rose-600" : "text-gray-500",
+            disabled && "text-gray-400",
+            leftIcon && "ml-6",
+            isUnderlined && "font-normal"
+          )}
+        >
+          {label}
+        </label>
+      );
+    }
+
+    return (
       <label
         htmlFor={inputId}
         className={clsx(
-          "absolute left-0 text-sm pointer-events-none transition-all duration-200",
-          size === "sm" &&
-            "top-1 peer-placeholder-shown:translate-y-[0.3rem] peer-focus:-translate-y-[0.6rem]",
-          size === "md" &&
-            "top-2 peer-placeholder-shown:translate-y-[0.5rem] peer-focus:-translate-y-[0.8rem]",
-          size === "lg" &&
-            "top-3 peer-placeholder-shown:translate-y-[0.7rem] peer-focus:-translate-y-[1.0rem]",
-          leftIcon && {
-            "peer-placeholder-shown:translate-x-8 peer-focus:translate-x-0":
-              true,
-          },
-          error ? "text-danger-500" : "text-gray-500",
+          "text-sm font-normal mb-1",
+          error ? "text-rose-600" : "text-gray-500",
           disabled && "text-gray-400"
         )}
       >
         {label}
       </label>
-    ) : label ? (
-      <label
-        htmlFor={inputId}
-        className={`text-sm font-medium mb-1 ${
-          disabled ? "text-gray-400" : "text-gray-900"
-        }`}
-      >
-        {label}
-      </label>
-    ) : null;
+    );
+  };
 
-  let currentRightIcon = isLoading ? <Spinner /> : rightIcon;
+  let iconRight = isLoading ? <Spinner /> : rightIcon;
   if (!isLoading && isValid) {
-    currentRightIcon = <FiCheckCircle className="text-success-500" />;
+    iconRight = <FiCheckCircle className="text-green-500" />;
   }
 
   return (
@@ -163,30 +222,17 @@ export const Input: React.FC<InputProps> = ({
     >
       {!(floatingLabel || variant === "underlined") && renderLabel()}
       <div className="relative flex items-center w-full">
-        {renderInputControl()}
-        {(floatingLabel || variant === "underlined") && renderLabel()}{" "}
+        {renderInput()}
+        {(floatingLabel || variant === "underlined") && renderLabel()}
+
         {leftIcon && (
-          <span
-            className={clsx(
-              "absolute left-2 text-gray-500",
-              size === "sm" && "top-1/2 -translate-y-1/2",
-              size === "md" && "top-1/2 -translate-y-1/2",
-              size === "lg" && "top-1/2 -translate-y-1/2"
-            )}
-          >
+          <span className="absolute left-2 text-gray-500 top-1/2 transform -translate-y-1/2">
             {leftIcon}
           </span>
         )}
-        {currentRightIcon && (
-          <span
-            className={clsx(
-              "absolute right-2 text-gray-500 text-xl",
-              size === "sm" && "top-1/2 -translate-y-1/2",
-              size === "md" && "top-1/2 -translate-y-1/2",
-              size === "lg" && "top-1/2 -translate-y-1/2"
-            )}
-          >
-            {currentRightIcon}
+        {iconRight && (
+          <span className="absolute right-2 text-gray-500 top-1/2 transform -translate-y-1/2">
+            {iconRight}
           </span>
         )}
       </div>

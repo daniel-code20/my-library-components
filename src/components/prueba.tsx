@@ -1,6 +1,12 @@
 import React from "react";
 import { Input } from "@/components/Input/Input";
-import { FiMail, FiCheckCircle, FiAlertCircle, FiUser, FiSearch } from "react-icons/fi";
+import {
+  FiMail,
+  FiCheckCircle,
+  FiAlertCircle,
+  FiUser,
+  FiSearch,
+} from "react-icons/fi";
 import { IoEyeSharp } from "react-icons/io5";
 
 const variants = ["flat", "bordered", "underlined", "faded"] as const;
@@ -43,7 +49,6 @@ export const Prueba: React.FC = () => {
             label="Password Input"
             type="password"
             placeholder="Secure password"
-            rightIcon={<IoEyeSharp />}
           />
         </div>
       </section>
@@ -59,7 +64,6 @@ export const Prueba: React.FC = () => {
               key={variant}
               className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end border-b border-gray-200 pb-6 last:border-b-0"
             >
-              {/* Normal */}
               <div className="flex flex-col gap-2">
                 <span className="text-lg font-semibold text-gray-800 capitalize">
                   {variant} - Normal
@@ -69,11 +73,8 @@ export const Prueba: React.FC = () => {
                   type="email"
                   variant={variant}
                   placeholder="normal@example.com"
-                  leftIcon={<FiMail />}
                 />
               </div>
-
-              {/* Loading */}
               <div className="flex flex-col gap-2">
                 <span className="text-lg font-semibold text-gray-800 capitalize">
                   {variant} - Loading
@@ -84,34 +85,8 @@ export const Prueba: React.FC = () => {
                   variant={variant}
                   isLoading
                   placeholder="loading..."
-                  leftIcon={<FiMail />}
                 />
               </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Error States */}
-      <section className="p-8 rounded-lg shadow-xl bg-red-50 mt-12">
-        <h2 className="mb-6 text-3xl font-bold text-red-600 border-b pb-3">
-          Errores
-        </h2>
-        <div className="flex flex-col gap-10">
-          {variants.map((variant) => (
-            <div key={variant} className="flex flex-col gap-2">
-              <span className="text-lg font-semibold text-red-700 capitalize">
-                {variant} - Error
-              </span>
-              <Input
-                label="Email"
-                type="email"
-                variant={variant}
-                error
-                helperText="Error en el email"
-                color="danger"
-                placeholder="error@example.com"
-              />
             </div>
           ))}
         </div>
@@ -134,7 +109,6 @@ export const Prueba: React.FC = () => {
                 type="email"
                 size={size}
                 variant="bordered"
-                leftIcon={<FiMail />}
               />
               <Input
                 label={`Username (${size})`}
@@ -143,39 +117,6 @@ export const Prueba: React.FC = () => {
                 size={size}
                 variant="flat"
                 helperText="Campo obligatorio"
-              />
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Floating Labels */}
-      <section className="p-8 rounded-lg shadow-xl bg-white">
-        <h2 className="mb-6 text-3xl font-bold text-gray-700 border-b border-gray-200 pb-3">
-          4. Floating Labels
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {sizes.map((size) => (
-            <div key={`floating-${size}`} className="flex flex-col gap-4">
-              <h3 className="text-xl font-semibold text-gray-700 capitalize">
-                Floating Label: {size}
-              </h3>
-              <Input
-                label={`Your Email (${size})`}
-                type="email"
-                size={size}
-                variant="flat"
-                floatingLabel
-                leftIcon={<FiMail />}
-              />
-              <Input
-                label={`Your Password (${size})`}
-                type="password"
-                size={size}
-                variant="bordered"
-                floatingLabel
-                error
-                helperText="Contraseña incorrecta"
               />
             </div>
           ))}
@@ -199,6 +140,36 @@ export const Prueba: React.FC = () => {
                 type="email"
                 radius={r}
                 variant="flat"
+              />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Floating Labels */}
+      <section className="p-8 rounded-lg shadow-xl bg-white">
+        <h2 className="mb-6 text-3xl font-bold text-gray-700 border-b border-gray-200 pb-3">
+          4. Floating Labels
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {sizes.map((size) => (
+            <div key={`floating-${size}`} className="flex flex-col gap-4">
+              <h3 className="text-xl font-semibold text-gray-700 capitalize">
+                Floating Label: {size}
+              </h3>
+              <Input
+                label={`Your Email (${size})`}
+                type="email"
+                size={size}
+                variant="flat"
+                floatingLabel
+              />
+              <Input
+                label={`Your Password (${size})`}
+                type="password"
+                size={size}
+                variant="bordered"
+                floatingLabel
               />
             </div>
           ))}
@@ -247,6 +218,7 @@ export const Prueba: React.FC = () => {
             label="Input with Both Icons"
             placeholder="User email"
             leftIcon={<FiUser />}
+            rightIcon={<FiMail />}
           />
           <Input
             label="Input with Loading State"
@@ -257,7 +229,7 @@ export const Prueba: React.FC = () => {
         </div>
       </section>
 
-      {/* Textarea / Multiline */}
+      {/* Textarea */}
       <section className="p-8 rounded-lg shadow-xl bg-white">
         <h2 className="mb-6 text-3xl font-bold text-gray-700 border-b border-gray-200 pb-3">
           8. Textarea (Multiline)
@@ -282,7 +254,7 @@ export const Prueba: React.FC = () => {
         </div>
       </section>
 
-      {/* Validation States (if isValid is implemented visually) */}
+      {/* Validation States */}
       <section className="p-8 rounded-lg shadow-xl bg-white">
         <h2 className="mb-6 text-3xl font-bold text-gray-700 border-b border-gray-200 pb-3">
           9. Validation States
@@ -291,8 +263,8 @@ export const Prueba: React.FC = () => {
           <Input
             label="Validated Input"
             placeholder="Looks good!"
-            isValid // Assuming isValid adds a visual cue like a green border/check
-            rightIcon={<FiCheckCircle className="text-green-500" />}
+            isValid
+            rightIcon={<FiCheckCircle />}
           />
           <Input
             label="Invalid Input"
@@ -301,6 +273,61 @@ export const Prueba: React.FC = () => {
             helperText="Please correct the error."
             rightIcon={<FiAlertCircle className="text-red-500" />}
           />
+        </div>
+      </section>
+
+      {/* Left Icon */}
+      <section className="p-8 rounded-lg shadow-xl bg-white">
+        <h2 className="mb-6 text-3xl font-bold text-gray-700 border-b border-gray-200 pb-3">
+          10. Left Icon
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <Input
+            label="Email"
+            placeholder="example@mail.com"
+            leftIcon={<FiMail />}
+          />
+          <Input label="User" placeholder="username" leftIcon={<FiUser />} />
+        </div>
+      </section>
+
+      {/* Right Icon */}
+      <section className="p-8 rounded-lg shadow-xl bg-white">
+        <h2 className="mb-6 text-3xl font-bold text-gray-700 border-b border-gray-200 pb-3">
+          11. Right Icon
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <Input label="Password" type="password" rightIcon={<IoEyeSharp />} />
+          <Input
+            label="Search"
+            placeholder="Search your files..."
+            rightIcon={<FiSearch />}
+          />
+        </div>
+      </section>
+
+      {/* Error States */}
+      <section className="p-8 rounded-lg shadow-xl bg-red-50 mt-12">
+        <h2 className="mb-6 text-3xl font-bold text-red-600 border-b pb-3">
+          Errores
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+          {variants.map((variant) => (
+            <div key={variant} className="flex flex-col gap-2">
+              <span className="text-lg font-semibold text-red-700 capitalize">
+                {variant} - Error
+              </span>
+              <Input
+                label="Email"
+                type="email"
+                variant={variant}
+                error
+                helperText="Error en el email"
+                color="danger"
+                placeholder="error@example.com"
+              />
+            </div>
+          ))}
         </div>
       </section>
     </div>
