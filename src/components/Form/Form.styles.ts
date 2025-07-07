@@ -1,0 +1,1 @@
+export const baseFormClass = "w-full space-y-6";

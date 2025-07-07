@@ -58,7 +58,7 @@ export const variantStyles = {
       warning:
         "border-amber-300 focus:border-amber-500 focus:ring-amber-100 text-amber-800",
       danger:
-        "border-rose-500 focus:border-rose-500 focus:ring-rose-100 text-rose-800", 
+        "border-rose-500 focus:border-rose-500 focus:ring-rose-100 text-rose-800",
     },
   },
   underlined: {
@@ -106,6 +106,7 @@ export function getInputClasses({
   hasRightIcon,
   floatingLabel = false,
   className,
+  error = false,
 }: {
   size: InputSize;
   radius: InputRadius;
@@ -115,15 +116,16 @@ export function getInputClasses({
   hasRightIcon?: boolean;
   floatingLabel?: boolean;
   className?: string;
+  error?: boolean;
 }) {
   const variantClassSet = variantStyles[variant];
 
   const paddingX = {
-    xs: "px-2",
+    xs: "px-3",
     sm: "px-3",
-    md: "px-4",
-    lg: "px-5",
-    xl: "px-6",
+    md: "px-3",
+    lg: "px-3",
+    xl: "px-3",
   };
 
   const paddingY = {
@@ -134,12 +136,22 @@ export function getInputClasses({
     xl: floatingLabel || variant === "underlined" ? "pt-10 pb-4" : "py-3",
   };
 
+  const errorClasses = error
+    ? [
+        errorStateClasses.border,
+        errorStateClasses.bg,
+        errorStateClasses.placeholder,
+        errorStateClasses.focusBorder,
+        errorStateClasses.focusRing,
+      ]
+    : [];
+
   return clsx(
     baseClasses,
     sizeClasses[size],
     radiusClasses[radius],
     variantClassSet.base,
-    variantClassSet.color[color],
+    error ? errorClasses : variantClassSet.color[color],
     paddingX[size],
     paddingY[size],
     hasLeftIcon && "pl-10",
@@ -147,7 +159,6 @@ export function getInputClasses({
     className
   );
 }
-
 
 export const errorStateClasses = {
   label: "text-rose-800",
@@ -157,5 +168,5 @@ export const errorStateClasses = {
   ring: "ring-rose-100",
   focusBorder: "focus:border-rose-600",
   focusRing: "focus:ring-rose-200",
-  bg: "bg-rose-50", 
+  bg: "bg-rose-50",
 };

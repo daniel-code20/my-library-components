@@ -47,6 +47,7 @@ export interface InputPropsBase {
   floatingLabel?: boolean;
   isLoading?: boolean;
   isValid?: boolean;
+  isRequired?: boolean;
 }
 
 export type InputProps =
@@ -68,6 +69,7 @@ export type InputProps =
 
 export const Input: React.FC<InputProps> = ({
   label,
+  isRequired,
   helperText,
   error = false,
   color = "default",
@@ -116,6 +118,7 @@ export const Input: React.FC<InputProps> = ({
     floatingLabel,
     hasLeftIcon: Boolean(leftIcon),
     hasRightIcon: Boolean(rightIcon || isLoading || isValid),
+    error
   });
 
   const sharedProps = {
@@ -131,6 +134,7 @@ export const Input: React.FC<InputProps> = ({
       (rightIcon || isLoading || isValid) && "pr-10"
     ),
     onChange: handleChange,
+    required: isRequired,
     ...props,
   };
 
@@ -155,13 +159,17 @@ export const Input: React.FC<InputProps> = ({
 
     const isFloating = floatingLabel;
     const isUnderlined = variant === "underlined";
+      const requiredMark = isRequired && (
+    <span className="text-red-500 ml-0.5">*</span>
+  );
+
 
     if (isFloating || isUnderlined) {
       return (
         <label
           htmlFor={inputId}
           className={clsx(
-            "absolute left-3 right-3 text-sm transition-all duration-200 origin-[0] pointer-events-none px-1",
+            "absolute left-3 right-3 text-sm transition-all duration-200 origin-[0] pointer-events-none ",
             // Floating label style
             isFloating &&
               clsx(
@@ -189,6 +197,7 @@ export const Input: React.FC<InputProps> = ({
           )}
         >
           {label}
+          {requiredMark}
         </label>
       );
     }
@@ -203,6 +212,7 @@ export const Input: React.FC<InputProps> = ({
         )}
       >
         {label}
+        {requiredMark}
       </label>
     );
   };
