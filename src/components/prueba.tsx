@@ -1,4 +1,3 @@
-import React from "react";
 import { Form } from "@/components/Form";
 import { Input } from "@/components/Input";
 import { Button } from "@/components/Button";
@@ -15,8 +14,15 @@ export const Prueba: React.FC = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
       <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
         <Form onSubmit={handleSubmit}>
-          <Input  label="Email" type="email" name="email" isRequired />
-          <Input label="Contraseña" type="password" name="password" isRequired />
+          <Input label="Name" name="name" type="text"/>
+          <Input label="Email" name="email" type="email" isRequired />
+          <Input
+            label="Contraseña"
+            name="password"
+            type="password"
+            isRequired
+            minLength={8}
+          />
           <Button type="submit" color="primary">
             Enviar
           </Button>

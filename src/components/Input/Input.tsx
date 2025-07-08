@@ -1,38 +1,21 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { getInputClasses } from "./inputStyles";
+import { FiCheckCircle } from "react-icons/fi";
 import type {
   Colors,
   InputSize,
   InputVariant,
   InputRadius,
 } from "./Input.types";
-import { FiCheckCircle } from "react-icons/fi";
 
-// Spinner de carga
 const Spinner = () => (
-  <svg
-    className="animate-spin h-5 w-5 text-current"
-    viewBox="0 0 24 24"
-    fill="none"
-  >
-    <circle
-      className="opacity-25"
-      cx="12"
-      cy="12"
-      r="10"
-      stroke="currentColor"
-      strokeWidth="4"
-    />
-    <path
-      className="opacity-75"
-      fill="currentColor"
-      d="M4 12a8 8 0 018-8V0C5.3 0 0 5.3 0 12h4z"
-    />
+  <svg className="animate-spin h-5 w-5 text-current" viewBox="0 0 24 24" fill="none">
+    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.3 0 0 5.3 0 12h4z" />
   </svg>
 );
 
-// Props base
 export interface InputPropsBase {
   color?: Colors;
   size?: InputSize;
@@ -48,24 +31,22 @@ export interface InputPropsBase {
   isLoading?: boolean;
   isValid?: boolean;
   isRequired?: boolean;
+  minLength?: number;
+  maxLength?: number;
+  pattern?: string;
+  type?: string;
 }
 
 export type InputProps =
   | ({
       multiline?: false;
+      type?: string;
     } & InputPropsBase &
-      Omit<React.InputHTMLAttributes<HTMLInputElement>, "size" | "color"> & {
-        onChange?: React.ChangeEventHandler<HTMLInputElement>;
-      })
+      Omit<React.InputHTMLAttributes<HTMLInputElement>, "size" | "color">)
   | ({
       multiline: true;
     } & InputPropsBase &
-      Omit<
-        React.TextareaHTMLAttributes<HTMLTextAreaElement>,
-        "size" | "color"
-      > & {
-        onChange?: React.ChangeEventHandler<HTMLTextAreaElement>;
-      });
+      Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, "size" | "color">);
 
 export const Input: React.FC<InputProps> = ({
   label,
@@ -86,28 +67,90 @@ export const Input: React.FC<InputProps> = ({
   isLoading,
   isValid,
   multiline = false,
+  minLength,
+  maxLength,
+  pattern,
+  type = "text",
   ...props
 }) => {
   const generatedId = React.useId();
   const inputId = id ?? generatedId;
 
-  const inputColor = error ? "danger" : color;
-  const [hasValue, setHasValue] = React.useState(
+  const [hasValue, setHasValue] = useState(
     Boolean(props.value ?? props.defaultValue ?? "")
   );
 
+  const [isTouched, setIsTouched] = useState(false);
+  const [isInvalid, setIsInvalid] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
+
+  const validate = () => {
+    const val = inputRef.current?.value ?? "";
+
+    if (isRequired && val.trim() === "") {
+      setErrorMessage("Este campo es obligatorio");
+      return true;
+    }
+
+    if (minLength && val.length < minLength) {
+      setErrorMessage(`Debe tener al menos ${minLength} caracteres`);
+      return true;
+    }
+
+    if (maxLength && val.length > maxLength) {
+      setErrorMessage(`No debe exceder los ${maxLength} caracteres`);
+      return true;
+    }
+
+    if (pattern && !(new RegExp(pattern).test(val))) {
+      setErrorMessage("El formato no es válido");
+      return true;
+    }
+
+    if (type === "email" && val) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(val)) {
+        setErrorMessage("El correo no es válido");
+        return true;
+      }
+    }
+
+    setErrorMessage("");
+    return false;
+  };
+
   useEffect(() => {
-    setHasValue(Boolean(props.value ?? props.defaultValue ?? ""));
-  }, [props.value, props.defaultValue]);
+    const form = inputRef.current?.closest("form");
+    if (!form) return;
+
+    const handleFormSubmit = (e: Event) => {
+      const hasError = validate();
+      setIsInvalid(hasError);
+      setIsTouched(true);
+      if (hasError) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+
+    form.addEventListener("submit", handleFormSubmit);
+    return () => form.removeEventListener("submit", handleFormSubmit);
+  }, [isRequired, minLength, maxLength, pattern, type]);
 
   const handleChange = (
-    e:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setHasValue(Boolean(e.target.value));
+    const val = e.target.value;
+    setHasValue(Boolean(val));
+    setIsTouched(true);
+    const hasError = validate();
+    setIsInvalid(hasError);
     props.onChange?.(e as never);
   };
+
+  const showError = error || (isTouched && isInvalid);
+  const inputColor = showError ? "danger" : color;
 
   const inputClasses = getInputClasses({
     size,
@@ -118,14 +161,15 @@ export const Input: React.FC<InputProps> = ({
     floatingLabel,
     hasLeftIcon: Boolean(leftIcon),
     hasRightIcon: Boolean(rightIcon || isLoading || isValid),
-    error
+    error: showError,
   });
 
   const sharedProps = {
     id: inputId,
+    type,
     placeholder: floatingLabel || variant === "underlined" ? " " : placeholder,
     disabled,
-    "aria-invalid": error,
+    "aria-invalid": showError,
     "aria-describedby": helperText ? `${inputId}-helper` : undefined,
     className: clsx(
       "peer w-full transition-all duration-200",
@@ -134,63 +178,52 @@ export const Input: React.FC<InputProps> = ({
       (rightIcon || isLoading || isValid) && "pr-10"
     ),
     onChange: handleChange,
-    required: isRequired,
     ...props,
   };
-
-  if (variant === "underlined") {
-    delete sharedProps.defaultValue;
-  }
 
   const renderInput = () =>
     multiline ? (
       <textarea
+        ref={inputRef as React.RefObject<HTMLTextAreaElement>}
         {...(sharedProps as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
         rows={4}
       />
     ) : (
       <input
+        ref={inputRef as React.RefObject<HTMLInputElement>}
         {...(sharedProps as React.InputHTMLAttributes<HTMLInputElement>)}
       />
     );
 
   const renderLabel = () => {
     if (!label) return null;
-
+    const requiredMark = isRequired && (
+      <span className="text-red-500 ml-0.5">*</span>
+    );
     const isFloating = floatingLabel;
     const isUnderlined = variant === "underlined";
-      const requiredMark = isRequired && (
-    <span className="text-red-500 ml-0.5">*</span>
-  );
-
 
     if (isFloating || isUnderlined) {
       return (
         <label
           htmlFor={inputId}
           className={clsx(
-            "absolute left-3 right-3 text-sm transition-all duration-200 origin-[0] pointer-events-none ",
-            // Floating label style
+            "absolute left-3 right-3 text-sm transition-all duration-200 origin-[0] pointer-events-none",
             isFloating &&
               clsx(
                 "peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100",
                 "peer-focus:top-2 peer-focus:scale-75 peer-focus:translate-y-0",
                 hasValue && "top-2 scale-75 translate-y-0",
-                !hasValue &&
-                  !props.value &&
-                  "top-1/2 -translate-y-1/2 scale-100"
+                !hasValue && "top-1/2 -translate-y-1/2 scale-100"
               ),
-            // Underlined label style
             isUnderlined &&
               clsx(
                 "peer-placeholder-shown:top-[70%] peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100",
                 "peer-focus:top-1 peer-focus:scale-75 peer-focus:translate-y-0",
                 hasValue && "top-1 scale-75 translate-y-0",
-                !hasValue &&
-                  !props.value &&
-                  "top-[70%] -translate-y-1/2 scale-100"
+                !hasValue && "top-[70%] -translate-y-1/2 scale-100"
               ),
-            error ? "text-rose-600" : "text-gray-500",
+            showError ? "text-rose-600" : "text-gray-500",
             disabled && "text-gray-400",
             leftIcon && "ml-6",
             isUnderlined && "font-normal"
@@ -207,7 +240,7 @@ export const Input: React.FC<InputProps> = ({
         htmlFor={inputId}
         className={clsx(
           "text-sm font-normal mb-1",
-          error ? "text-rose-600" : "text-gray-500",
+          showError ? "text-rose-600" : "text-gray-500",
           disabled && "text-gray-400"
         )}
       >
@@ -234,7 +267,6 @@ export const Input: React.FC<InputProps> = ({
       <div className="relative flex items-center w-full">
         {renderInput()}
         {(floatingLabel || variant === "underlined") && renderLabel()}
-
         {leftIcon && (
           <span className="absolute left-2 text-gray-500 top-1/2 transform -translate-y-1/2">
             {leftIcon}
@@ -247,15 +279,15 @@ export const Input: React.FC<InputProps> = ({
         )}
       </div>
 
-      {helperText && (
+      {(helperText || showError) && (
         <span
           id={`${inputId}-helper`}
           className={clsx(
             "text-xs mt-0.5",
-            error ? "text-rose-600" : "text-gray-500"
+            showError ? "text-rose-600" : "text-gray-500"
           )}
         >
-          {helperText}
+          {showError ? errorMessage || helperText : helperText}
         </span>
       )}
     </div>
