@@ -4,9 +4,24 @@ import { Switch } from "@/components/Switch";
 import { Checkbox } from "@/components/Checkbox";
 
 export const Prueba: React.FC = () => {
-  const [selected, setSelected] = useState("option1");
+  
   const [isChecked, setIsChecked] = useState(false);
   const [isToggled, setIsToggled] = useState(false);
+  const animals = [
+    { key: "cat", label: "Cat" },
+    { key: "dog", label: "Dog" },
+    { key: "elephant", label: "Elephant" },
+    { key: "lion", label: "Lion" },
+    { key: "tiger", label: "Tiger" },
+    { key: "giraffe", label: "Giraffe" },
+    { key: "dolphin", label: "Dolphin" },
+    { key: "penguin", label: "Penguin" },
+    { key: "zebra", label: "Zebra" },
+    { key: "shark", label: "Shark" },
+    { key: "whale", label: "Whale" },
+    { key: "otter", label: "Otter" },
+    { key: "crocodile", label: "Crocodile" },
+  ];
 
   return (
     <div className="p-8 space-y-6 max-w-md mx-auto bg-white rounded shadow">
@@ -16,28 +31,26 @@ export const Prueba: React.FC = () => {
       <div>
         <h3 className="text-lg font-semibold mb-2">Select</h3>
         <Select
-          label="Elige una opción"
-          value={selected}
-          onChange={(e) => setSelected(e.target.value)}
-          options={[
-            { label: "Opción 1", value: "option1" },
-            { label: "Opción 2", value: "option2" },
-            { label: "Opción 3", value: "option3" },
-          ]}
+          items={animals}
+          placeholder="Select an animal"
+          onChange={(value) => console.log("Selected:", value)}
+          className="max-w-xs"
         />
-        <p className="mt-2 text-sm text-gray-600">
-          Valor seleccionado: <strong>{selected}</strong>
-        </p>
       </div>
 
       {/* Checkbox */}
       <div>
         <h3 className="text-lg font-semibold mb-2">Checkbox</h3>
-        <Checkbox
-          label="Aceptar términos y condiciones"
-          checked={isChecked}
-          onChange={(e) => setIsChecked(e.target.checked)}
-        />
+        
+      <Checkbox
+        label="Aceptar términos y condiciones"
+        checked={isChecked}
+        onChange={(e) => setIsChecked(e.target.checked)}
+        color="primary"
+        size="md"
+        radius="md"
+      />
+
         <p className="mt-2 text-sm text-gray-600">
           Estado: <strong>{isChecked ? "Marcado" : "Desmarcado"}</strong>
         </p>
@@ -58,4 +71,3 @@ export const Prueba: React.FC = () => {
     </div>
   );
 };
-

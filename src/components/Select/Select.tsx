@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import type { SelectProps, SelectOption } from "./Select.types";
+import type { SelectItem, CustomSelectProps } from "./Select.types";
 import {
   container,
   label as labelStyle,
@@ -8,16 +8,24 @@ import {
   option,
   optionSelected,
 } from "./Select.styles";
-import { FiChevronDown } from "react-icons/fi";
+import { FiChevronDown, FiCheck } from "react-icons/fi";
 
-export const Select: React.FC<SelectProps> = ({ options, label, className, onChange, ...props }) => {
+export const Select: React.FC<CustomSelectProps> = ({
+  items = [],
+  label,
+  placeholder = "Select an option",
+  className,
+  onChange,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState<SelectOption | null>(options[0]);
+  const [selectedKey, setSelectedKey] = useState<string | number | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  const selectedItem = items.find((item) => item.key === selectedKey);
+
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setIsOpen(false);
       }
     };
@@ -25,40 +33,50 @@ export const Select: React.FC<SelectProps> = ({ options, label, className, onCha
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleSelect = (option: SelectOption) => {
-    setSelected(option);
+  const handleSelect = (item: SelectItem) => {
+    setSelectedKey(item.key);
+    onChange?.(item.key);
     setIsOpen(false);
-    onChange?.({
-      ...props,
-      target: { value: option.value },
-    } as React.ChangeEvent<HTMLSelectElement>);
   };
 
   return (
     <div className={`${container} ${className || ""}`} ref={dropdownRef}>
       {label && <label className={labelStyle}>{label}</label>}
 
-      <button type="button" className={triggerButton} onClick={() => setIsOpen((prev) => !prev)}>
-        <span>{selected?.label}</span>
-        <FiChevronDown className="ml-2" />
+      <button
+        type="button"
+        className={triggerButton}
+        onClick={() => setIsOpen((prev) => !prev)}
+      >
+        <span>{selectedItem?.label || placeholder}</span>
+        <FiChevronDown
+          className={`ml-2 transform transition-transform duration-200 ${
+            isOpen ? "rotate-180" : "rotate-0"
+          }`}
+        />
       </button>
 
-      {isOpen && (
-        <ul className={dropdown}>
-          {options.map((optionItem) => (
+      <ul
+        className={`${dropdown} ${
+          isOpen
+            ? "opacity-100 scale-100 visible"
+            : "opacity-0 scale-95 invisible pointer-events-none"
+        }`}
+      >
+        {items.map((item) => {
+          const isSelected = selectedKey === item.key;
+          return (
             <li
-              key={optionItem.value}
-              className={`${option} ${
-                selected?.value === optionItem.value ? optionSelected : ""
-              }`}
-              onClick={() => handleSelect(optionItem)}
+              key={item.key}
+              className={`${option} ${isSelected ? optionSelected : ""}`}
+              onClick={() => handleSelect(item)}
             >
-              {optionItem.label}
+              <span className="flex-1 truncate">{item.label}</span>
+              {isSelected && <FiCheck className="ml-2 text-blue-500 shrink-0" />}
             </li>
-          ))}
-        </ul>
-      )}
+          );
+        })}
+      </ul>
     </div>
   );
 };
-

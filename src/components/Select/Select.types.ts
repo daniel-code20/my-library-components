@@ -1,9 +1,12 @@
-export interface SelectOption {
+export interface SelectItem {
+  key: string | number;
   label: string;
-  value: string | number;
 }
 
-export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+export interface CustomSelectProps {
   label?: string;
-  options: SelectOption[];
+  placeholder?: string;
+  items: SelectItem[];
+  className?: string;
+  onChange?: (value: string | number) => void;
 }
