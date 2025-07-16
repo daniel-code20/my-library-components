@@ -1,73 +1,99 @@
-import { useState } from "react";
-import { Select } from "@/components/Select";
-import { Switch } from "@/components/Switch";
-import { Checkbox } from "@/components/Checkbox";
+import { Chip } from "@/components/Chip";
+
+export const CheckIcon = ({ size = 24, ...props }) => (
+  <svg
+    fill="none"
+    height={size}
+    width={size}
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <path
+      d="M12 2C6.49 2 2 6.49 2 12C2 17.51 6.49 22 12 22C17.51 22 22 17.51 22 12C22 6.49 17.51 2 12 2ZM16.78 9.7L11.11 15.37C10.97 15.51 10.78 15.59 10.58 15.59C10.38 15.59 10.19 15.51 10.05 15.37L7.22 12.54C6.93 12.25 6.93 11.77 7.22 11.48C7.51 11.19 7.99 11.19 8.28 11.48L10.58 13.78L15.72 8.64C16.01 8.35 16.49 8.35 16.78 8.64C17.07 8.93 17.07 9.4 16.78 9.7Z"
+      fill="currentColor"
+    />
+  </svg>
+);
+
+export const NotificationIcon = ({ size = 24, ...props }) => (
+  <svg
+    fill="none"
+    height={size}
+    width={size}
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <path
+      clipRule="evenodd"
+      fillRule="evenodd"
+      d="M18.707 8.796c0 1.256.332 1.997 1.063 2.85.553.628.73 1.435.73 2.31 0 .874-.287 1.704-.863 2.378a4.537 4.537 0 01-2.9 1.413c-1.571.134-3.143.247-4.736.247-1.595 0-3.166-.068-4.737-.247a4.532 4.532 0 01-2.9-1.413 3.616 3.616 0 01-.864-2.378c0-.875.178-1.682.73-2.31.754-.854 1.064-1.594 1.064-2.85V8.37c0-1.682.42-2.781 1.283-3.858C7.861 2.942 9.919 2 11.956 2h.09c2.08 0 4.204.987 5.466 2.625.82 1.054 1.195 2.108 1.195 3.745v.426zM9.074 20.061c0-.504.462-.734.89-.833.5-.106 3.545-.106 4.045 0 .428.099.89.33.89.833-.025.48-.306.904-.695 1.174a3.635 3.635 0 01-1.713.731 3.795 3.795 0 01-1.008 0 3.618 3.618 0 01-1.714-.732c-.39-.269-.67-.694-.695-1.173z"
+      fill="currentColor"
+    />
+  </svg>
+);
 
 export const Prueba: React.FC = () => {
-  
-  const [isChecked, setIsChecked] = useState(false);
-  const [isToggled, setIsToggled] = useState(false);
-  const animals = [
-    { key: "cat", label: "Cat" },
-    { key: "dog", label: "Dog" },
-    { key: "elephant", label: "Elephant" },
-    { key: "lion", label: "Lion" },
-    { key: "tiger", label: "Tiger" },
-    { key: "giraffe", label: "Giraffe" },
-    { key: "dolphin", label: "Dolphin" },
-    { key: "penguin", label: "Penguin" },
-    { key: "zebra", label: "Zebra" },
-    { key: "shark", label: "Shark" },
-    { key: "whale", label: "Whale" },
-    { key: "otter", label: "Otter" },
-    { key: "crocodile", label: "Crocodile" },
-  ];
-
   return (
     <div className="p-8 space-y-6 max-w-md mx-auto bg-white rounded shadow">
       <h2 className="text-2xl font-bold text-gray-800">Componentes Básicos</h2>
 
-      {/* Select */}
-      <div>
-        <h3 className="text-lg font-semibold mb-2">Select</h3>
-        <Select
-          items={animals}
-          placeholder="Select an animal"
-          onChange={(value) => console.log("Selected:", value)}
-          className="max-w-xs"
-        />
-      </div>
-
-      {/* Checkbox */}
-      <div>
-        <h3 className="text-lg font-semibold mb-2">Checkbox</h3>
-        
-      <Checkbox
-        label="Aceptar términos y condiciones"
-        checked={isChecked}
-        onChange={(e) => setIsChecked(e.target.checked)}
-        color="primary"
+      {/* <Chip color="success" variant="outline" radius="full" size="md">
+        Chip
+      </Chip>
+       */}
+       <Chip
+        avatar={<img src="https://images.unsplash.com/photo-1543610892-0b1f7e6d8ac1?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" className="object-cover" />}
+        avatarPosition="start"
+        color="default"
+        radius="full"
         size="md"
-        radius="md"
-      />
+        
+      >
+        Usuario
+      </Chip>
 
-        <p className="mt-2 text-sm text-gray-600">
-          Estado: <strong>{isChecked ? "Marcado" : "Desmarcado"}</strong>
-        </p>
+      <div className="flex gap-4">
+        <Chip
+          color="success"
+          startContent={<CheckIcon size={18} />}
+          variant="faint"
+        >
+          Confirmado
+        </Chip>
+
+        <Chip
+          color="secondary"
+          endContent={<NotificationIcon size={18} />}
+          variant="smooth"
+          radius="full"
+          size="md"
+        >
+          Chip
+        </Chip>
+        <Chip
+          color="primary"
+          variant="smooth"
+          closable
+          radius="full"
+          onClose={() => alert("Cerrado")}
+        >
+          Error
+        </Chip>
+     
+
+      <Chip
+        avatar={<img src="https://images.unsplash.com/photo-1543610892-0b1f7e6d8ac1?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" className="object-cover" />}
+        avatarPosition="end"
+        color="default"
+        variant="outline"
+        radius="full"
+      >
+        Usuario
+      </Chip>
       </div>
 
-      {/* Switch */}
-      <div>
-        <h3 className="text-lg font-semibold mb-2">Switch</h3>
-        <Switch
-          label="Modo oscuro"
-          checked={isToggled}
-          onChange={() => setIsToggled((prev) => !prev)}
-        />
-        <p className="mt-2 text-sm text-gray-600">
-          Estado: <strong>{isToggled ? "Activado" : "Desactivado"}</strong>
-        </p>
-      </div>
     </div>
   );
 };
