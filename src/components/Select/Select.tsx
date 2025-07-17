@@ -25,7 +25,10 @@ export const Select: React.FC<CustomSelectProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
@@ -48,7 +51,9 @@ export const Select: React.FC<CustomSelectProps> = ({
         className={triggerButton}
         onClick={() => setIsOpen((prev) => !prev)}
       >
-        <span>{selectedItem?.label || placeholder}</span>
+        <span className={selectedItem ? "text-black" : "font-normal"}>
+          {selectedItem?.label || placeholder}
+        </span>
         <FiChevronDown
           className={`ml-2 transform transition-transform duration-200 ${
             isOpen ? "rotate-180" : "rotate-0"
@@ -72,7 +77,9 @@ export const Select: React.FC<CustomSelectProps> = ({
               onClick={() => handleSelect(item)}
             >
               <span className="flex-1 truncate">{item.label}</span>
-              {isSelected && <FiCheck className="ml-2 text-blue-500 shrink-0" />}
+              {isSelected && (
+                <FiCheck className="ml-2 text-black shrink-0" />
+              )}
             </li>
           );
         })}

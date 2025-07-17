@@ -2,7 +2,7 @@ import { Colors, Variant } from "./Button.types";
 
 export const variantClasses: Record<Colors, Record<Variant, string>> = {
   default: {
-    solid: "text-white bg-neutral-600 hover:bg-neutral-600/90",
+    solid: "text-black bg-neutral-300 hover:bg-neutral-300/90",
     outline: "bg-transparent text-neutral-600 border border-neutral-600 hover:text-neutral-700 hover:border-neutral-700",
     ghost: "bg-transparent text-neutral-600 border border-neutral-600 hover:bg-neutral-600 hover:text-white",
     smooth: "bg-neutral-600/20 border border-neutral-600/20 text-neutral-600 hover:bg-neutral-600/30",

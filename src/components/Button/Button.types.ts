@@ -13,6 +13,8 @@ export interface ButtonProps
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   loading?: boolean;
+  onPress?: () => void;
+  
 }
 
 export interface IconButtonProps

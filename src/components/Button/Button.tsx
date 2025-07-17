@@ -16,11 +16,17 @@ export const Button: React.FC<ButtonProps> = ({
   children,
   className = "",
   disabled,
-
+  onPress,
   ...props
 }) => {
+
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    onPress?.();
+    props.onClick?.(e); // Optional: soporta onClick también si lo usan directamente
+  };
+
   const base =
-    "inline-flex items-center gap-2 font-medium transition-colors duration-200 justify-center";
+    "inline-flex items-center gap-2 transition-colors duration-200 justify-center";
 
   const variantStyle = variantClasses[color][variant];
 
@@ -40,6 +46,7 @@ export const Button: React.FC<ButtonProps> = ({
       )}
       disabled={disabled || loading}
       {...props}
+      onClick={handleClick}
     >
       {loading && <FiLoader className="animate-spin" />}
       {!loading && leftIcon && <span>{leftIcon}</span>}
