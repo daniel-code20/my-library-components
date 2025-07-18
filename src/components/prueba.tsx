@@ -1,30 +1,37 @@
-import { Select } from "./Select";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/Popover";
+import { Button } from "./Button";
 
 export const Prueba: React.FC = () => {
+  const content = (
+    <PopoverContent>
+      <div className="p-4">
+        <div className="text-sm font-bold">Popover Content</div>
+        <div className="text-xs">This is the popover content</div>
+      </div>
+    </PopoverContent>
+  );
 
-    const items = [
-    { key: "1", label: "Opción 1" },
-    { key: "2", label: "Opción 2" },
-    { key: "3", label: "Opción 3" },
-    { key: "4", label: "Opción 3" },
-    { key: "5", label: "Opción 3" },
-    { key: "6", label: "Opción 3" },
-    { key: "7", label: "Opción 3" },
-    { key: "8", label: "Opción 3" },
-    { key: "9", label: "Opción 3" },
-    { key: "10", label: "Opción 3" },
-    { key: "11", label: "Opción 3" },
-  ];
+  const colors = [
+    "default",
+    "primary",
+    "secondary",
+    "success",
+    "warning",
+    "danger",
+  ] as const;
 
   return (
-    <div className="p-8 space-y-6 max-w-md mx-auto bg-white rounded shadow">
-      <h2 className="text-2xl font-bold text-gray-800">Componentes Básicos</h2>
-       <Select
-        items={items}
-        label="Selecciona una opción"
-        placeholder="Elige una opción"
-        
-      />
+        <div className="min-h-screen flex flex-wrap justify-center items-center gap-4">
+      {colors.map((color) => (
+        <Popover key={color} color={color} placement="bottom" backdrop="blur">
+          <PopoverTrigger>
+            <Button className="capitalize" color={color}>
+              {color}
+            </Button>
+          </PopoverTrigger>
+          {content}
+        </Popover>
+      ))}
     </div>
   );
 };
