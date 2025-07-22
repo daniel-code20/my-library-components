@@ -1,6 +1,6 @@
 {
   "name": "dt-component-library",
-  "version": "2.0.8",
+  "version": "2.0.10",
   "type": "module",
   "description": "Librería de componentes con React, Tailwind y Vite",
   "main": "dist/my-component-library.umd.js",

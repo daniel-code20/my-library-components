@@ -6,7 +6,8 @@ import {
   radiusClasses,
   colorClasses,
   variantClasses,
-  containerVariantClasses,
+  variantColorClasses,
+  getContainerClasses,
 } from "./Tabs.styles";
 
 export const Tabs: React.FC<TabsProps> = ({
@@ -25,8 +26,8 @@ export const Tabs: React.FC<TabsProps> = ({
     <div
       className={clsx(
         "inline-flex items-center",
+        getContainerClasses(variant, size, radius, color),
         variant === "underline" ? "gap-6" : "gap-1",
-        containerVariantClasses[variant],
         className
       )}
       role="tablist"
@@ -45,8 +46,9 @@ export const Tabs: React.FC<TabsProps> = ({
               !isUnderline && sizeClasses[size],
               !isUnderline && radiusClasses[radius],
               variantClasses[variant],
-              !isUnderline && colorClasses[color],
-              isActive ? "font-normal" : "opacity-70 hover:opacity-100"
+              colorClasses[color],
+              variantColorClasses[variant]?.[color],
+              isActive ? "font-normal" : "opacity-70"
             )}
             aria-selected={isActive}
             aria-controls={`tabpanel-${index}`}

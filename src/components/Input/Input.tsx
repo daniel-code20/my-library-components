@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { FiCheckCircle } from "react-icons/fi";
 import { getInputClasses } from "./inputStyles";
 import type {
-  Colors,
+  InputColors ,
   InputSize,
   InputVariant,
   InputRadius,
@@ -17,7 +17,7 @@ const Spinner = () => (
 );
 
 export interface InputPropsBase {
-  color?: Colors;
+  color?: InputColors ;
   size?: InputSize;
   radius?: InputRadius;
   variant?: InputVariant;

@@ -13,7 +13,7 @@ export const TabPanel: React.FC<TabPanelProps> = ({
   return (
      <div
       className={clsx(
-        "mt-4 w-full max-w-3xl rounded-xl bg-white p-4 2shadow-lg border border-gray-200",
+        "mt-4 w-full max-w-3xl rounded-xl bg-white p-4 shadow-lg border border-gray-200",
         className
       )}
       role="tabpanel"

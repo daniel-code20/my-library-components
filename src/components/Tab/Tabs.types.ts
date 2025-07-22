@@ -3,7 +3,7 @@ import React from 'react';
 export type TabSize = 'sm' | 'md' | 'lg';
 export type TabRadius = 'none' | 'sm' | 'md' | 'lg' | 'full';
 export type TabColor = 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
-export type TabVariant = 'light' | 'underline' | 'bordered' | 'solid' | 'faded' | 'shadow';
+export type TabVariant = 'light' | 'underline' | 'bordered' | 'solid' ;
 
 export interface TabItem {
   label: string;

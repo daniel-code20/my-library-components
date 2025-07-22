@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import type {
-  Colors,
+  InputColors ,
   InputSize,
   InputVariant,
   InputRadius,
@@ -111,7 +111,7 @@ export function getInputClasses({
   size: InputSize;
   radius: InputRadius;
   variant: InputVariant;
-  color: Colors;
+  color: InputColors ;
   hasLeftIcon?: boolean;
   hasRightIcon?: boolean;
   floatingLabel?: boolean;
