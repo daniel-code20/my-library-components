@@ -1,4 +1,4 @@
-import './App.css'
+import './output.css'
 import { Prueba } from './components/prueba'
 
 function App() {
@@ -6,7 +6,6 @@ function App() {
   return (
     <>
       <Prueba/>
-
     </>
   )
 }

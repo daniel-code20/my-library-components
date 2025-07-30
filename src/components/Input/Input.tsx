@@ -35,7 +35,7 @@ export interface InputPropsBase {
   maxLength?: number;
   pattern?: string;
   type?: string;
-  validateInternally?: boolean; // ✅ Nuevo
+  validateInternally?: boolean;
 }
 
 export type InputProps =
