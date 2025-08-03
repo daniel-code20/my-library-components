@@ -1,6 +1,7 @@
 import React from "react";
 import { DarkModeToggle } from "./DarkModeToggle";
-import { Progress } from "./Progress";
+import { Breadcrumbs } from "@/components/Breadcrumbs/Breadcrumbs";
+import { BreadcrumbItem } from "@/components/Breadcrumbs";
 
 export const Prueba: React.FC = () => {
   return (
@@ -13,14 +14,23 @@ export const Prueba: React.FC = () => {
 
       {/* Component */}
       <div className="w-full max-w-md">
-        <Progress
-          label="Loading"
-          value={50}
+        <Breadcrumbs
+          variant="bordered"
+          radius="md"
+          color="foreground"
           size="md"
-          color="primary"
-          isStriped
-       
-        />
+          underline="hover"
+          separator=">"
+          maxItems={4}
+          itemsBeforeCollapse={1}
+          itemsAfterCollapse={1}
+          onAction={(key) => console.log("Clicked:", key)}
+        >
+          <BreadcrumbItem>Inicio</BreadcrumbItem>
+          <BreadcrumbItem>Biblioteca</BreadcrumbItem>
+          <BreadcrumbItem>Libros</BreadcrumbItem>
+          <BreadcrumbItem isCurrent>Detalle</BreadcrumbItem>
+        </Breadcrumbs>
       </div>
     </div>
   );
